@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -27,19 +28,19 @@ import java.util.Locale;
 import static android.R.id.content;
 
 public class MainActivity extends AppCompatActivity {
-    private ViewPager mViewPager;
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private Uri mMediaUri;
     public static final int PERMISSION_REQUEST_CODE = 2;
-    private View mLayout;
+    private CoordinatorLayout mCoordinatorLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showWriteToStorageSnackbar() {
-        Snackbar.make(mLayout,"Write to storage is required to store and access photos/videos.",Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(mCoordinatorLayout,"Write to storage is required to store and access photos/videos.",Snackbar.LENGTH_INDEFINITE)
                 .setAction("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
