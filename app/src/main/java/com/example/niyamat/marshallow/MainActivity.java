@@ -42,19 +42,24 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
+
+
+
+
+
+
+
+
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                checkWriteExternalStorage();
             }
-
-
-
-
         });
-
     }
 
 
@@ -72,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
         }
     }
+
+
+
+
+
+
+
+
+
 
     private Uri getOutPutMediaFileUri(int mediaType) {
         if (isExternalStorageAvailable()) {
@@ -99,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
+
+
+
+
+
     private boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
@@ -108,10 +129,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
+
+
+
     private void checkWriteExternalStorage() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
-showCamera();
+                        showCamera();
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 showWriteToStorageSnackbar();
@@ -121,6 +147,12 @@ showCamera();
 
         }
     }
+
+
+
+
+
+
 
     private void requestWritePermissionWithCallback() {
     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -159,7 +191,7 @@ showCamera();
         //if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-showCamera();
+                    showCamera();
             } else {
                 showWriteToStorageSnackbar();
             }
@@ -204,38 +236,5 @@ showCamera();
         return super.onOptionsItemSelected(item);
     }
 }
-
-
-/*   fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                                .setAction("Action", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        mMediaUri = getOutPutMediaFileUri(MEDIA_TYPE_IMAGE);
-                                        startActivityForResult(intent, TAKE_PHOTO_REQUEST);
-                                    }
-
-                                    private Uri getOutPutMediaFileUri(int mediaType) {
-                                        if (isExternalStorageAvailable()) {
-                                            return null;
-                                        } else {
-                                            return null;
-                                        }
-                                    }
-
-                                    private boolean isExternalStorageAvailable() {
-                                        String state = Environment.getExternalStorageState();
-                                        if (state.equals(Environment.MEDIA_MOUNTED)) {
-                                            return true;
-                                        } else {
-                                            return false;
-                                        }
-                                    }
-                                }).show();
-                    }
-                }); */
 
 
