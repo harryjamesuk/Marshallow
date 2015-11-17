@@ -43,70 +43,83 @@ public class MainActivity extends AppCompatActivity {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkWriteExternalStorage();
-                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                mMediaUri = getOutPutMediaFileUri(MEDIA_TYPE_IMAGE);
-                if (mMediaUri == null) {
-                    Log.d(TAG, "There is a problem accessing your device's external storage");
-                } else {
-                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                    startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
-                }
+               checkWriteExternalStorage();
             }
 
-            private Uri getOutPutMediaFileUri(int mediaType) {
-                if (isExternalStorageAvailable()) {
-                    String appName = MainActivity.class.toString();
-                    File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), appName);
-                    if (!mediaStorageDir.exists()) {
-                        if (!mediaStorageDir.mkdirs()) {
-                            Log.d(TAG, "There was an problem creating dirctory");
-                            return null;
-                        }
-                    }
-                    Date date = new Date();
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(date);
-                    File mediaFile;
-                    String path = mediaStorageDir.getPath() + File.separator;
-                    if (mediaType == MEDIA_TYPE_IMAGE) {
-                        mediaFile = new File(path + "IMG_" + timeStamp + ".jpg");
-                    } else {
-                        return null;
-                    }
-                    Log.d(TAG, "File" + Uri.fromFile(mediaFile));
-                    return Uri.fromFile(mediaFile);
-                } else {
-                    return null;
-                }
-            }
 
-            private boolean isExternalStorageAvailable() {
-                String state = Environment.getExternalStorageState();
-                if (state.equals(Environment.MEDIA_MOUNTED)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+
+
         });
 
     }
 
-    private boolean checkWriteExternalStorage() {
+
+
+
+
+
+    private void showCamera() {
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        mMediaUri = getOutPutMediaFileUri(MEDIA_TYPE_IMAGE);
+        if (mMediaUri == null) {
+            Log.d(TAG, "There is a problem accessing your device's external storage");
+        } else {
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+        }
+    }
+
+    private Uri getOutPutMediaFileUri(int mediaType) {
+        if (isExternalStorageAvailable()) {
+            String appName = MainActivity.this.getString(R.string.app_name);
+            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), appName);
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) {
+                    Log.d(TAG, "There was an problem creating dirctory");
+                    return null;
+                }
+            }
+            Date date = new Date();
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(date);
+            File mediaFile;
+            String path = mediaStorageDir.getPath() + File.separator;
+            if (mediaType == MEDIA_TYPE_IMAGE) {
+                mediaFile = new File(path + "IMG_" + timeStamp + ".jpg");
+            } else {
+                return null;
+            }
+            Log.d(TAG, "File" + Uri.fromFile(mediaFile));
+            return Uri.fromFile(mediaFile);
+        } else {
+            return null;
+        }
+    }
+
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void checkWriteExternalStorage() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            //We don't have permission
+                == PackageManager.PERMISSION_GRANTED) {
+showCamera();
+        } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 showWriteToStorageSnackbar();
             } else {
                 requestWritePermissionWithCallback();
             }
-            return false;
+
         }
-        return true;
     }
 
     private void requestWritePermissionWithCallback() {
@@ -124,24 +137,50 @@ public class MainActivity extends AppCompatActivity {
                 }).show();
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    showWriteToStorageSnackbar();
-                }
-                break;
-                default:
-                    Log.e(TAG, "Got request code: " + requestCode + " which is not used in switch.");
-                    break;
-
+        //if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+showCamera();
+            } else {
+                showWriteToStorageSnackbar();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
